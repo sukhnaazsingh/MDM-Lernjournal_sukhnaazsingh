@@ -91,7 +91,7 @@ MarkupSafe==2.1.3
 
 ---
 
-## 🚀 Projekt starten (lokal)
+## Projekt starten (lokal)
 
 ```bash
 # Virtuelle Umgebung aktivieren (sofern vorhanden)
