@@ -1,40 +1,126 @@
-﻿# Lernjournal 1 Python
+﻿# Lernjournal 1 
 
-## Repository und Library
+## 🔗 Repository
 
-| | Bitte ausfüllen |
-| -------- | ------- |
-| Repository (URL)  | https://github.com/DEIN_USERNAME/flashcard-app |
-| Kurze Beschreibung der App-Funktion | Flashcard-App mit Add/Delete/Flip-Funktionalität, Carousel-Effekt mit Sneak-Peek |
-| Verwendete Library aus PyPi (Name) | keine |
-| Verwendete Library aus PyPi (URL) | keine |
-| ... | |
-| ... | |
+| | |
+|--|--|
+| **Repository (URL)** | [https://github.com/sukhnaazsingh/mdm_lernjournal_1_python.git](https://github.com/sukhnaazsingh/mdm_lernjournal_1_python.git) |
+| **Kurze Beschreibung** | Eine einfache Web-App zur Verwaltung von Lernkarten (Flashcards) – inkl. Hinzufügen, Löschen und Blättern im Carousel-Stil |
 
-## App, Funktionalität
-Die Applikation erlaubt es dem User, Lernkarten (Flashcards) zu erstellen, zu durchsuchen und zu üben. Die Karten werden auf der Seite als Carousel angezeigt – mit einer aktiven Karte in der Mitte und einer Vorschau der vorherigen/nächsten Karte.
+---
 
-#### Ansicht im Web-UI:
-!!!!! ERGÄNZEN (Screenshot der Hauptansicht mit Carousel) !!!!!
+## 🧠 Projektidee & Ziel
 
-### Funktionen Karten bearbeiten
-Der User kann eine neue Karte über ein Modal hinzufügen (mit Eingabe von Vorder- und Rückseite) oder bestehende Karten über die Seitenleiste löschen.
+Ziel des Projekts war es, eine interaktive Lernkarten-App mit Python und Flask zu entwickeln. Die Anwendung ermöglicht es Nutzer:innen, Lernkarten dynamisch zu erstellen, zu löschen und durch ein ansprechendes Frontend zu navigieren. Durch das moderne Carousel-Layout mit einer Flip-Funktion ist das Interface übersichtlich und intuitiv gestaltet.
 
-#### Ansicht im Web-UI:
+---
 
-!!!!! ERGÄNZEN (Screenshot Modal + Seitenleiste mit Kartenliste) !!!!!
+## ⚙️ Funktionen im Überblick
 
-#### Code der Applikation:
+| Funktion                 | Beschreibung |
+|--------------------------|--------------|
+| Karten anzeigen          | Flashcards werden als zentrales Karussell mit Sneak-Peek links/rechts angezeigt. |
+| Karten hinzufügen        | Über ein HTML-Formular lassen sich neue Karten erstellen (Vorder-/Rückseite). |
+| Karten löschen           | Jede Karte kann über einen Button entfernt werden. |
+| Karten umdrehen (flip)   | Die mittlere Karte kann durch Klick umgedreht werden, um die Rückseite anzuzeigen. |
+| Navigation               | Durch Buttons kann zwischen den Karten geblättert werden. |
 
-!!!!! ERGÄNZEN (Screenshot der `app.py` Flask-Routen oder JS-Rendering) !!!!!
+---
 
-### Flashcard Viewer mit Analyse-Funktion *(optional)*
-Aktuell enthält die App keine Textanalyse, kann aber mit einer Library wie `textblob` oder eigener Logik um Wortanzahl, Palindrome etc. erweitert werden.
+## 🧩 Technischer Aufbau
 
-## Dependency Management
+### 🔙 Backend – Flask (Python)
 
-Da keine externen Libraries verwendet werden (reines Flask + HTML/JS), enthält das Projekt ein minimales `requirements.in`:
+Das Backend basiert auf Flask und stellt die Basisrouten sowie die Logik zur Verwaltung der Flashcards zur Verfügung:
 
-### Beispiel `requirements.in`:
+```python
+@app.route('/')
+def index():
+    return render_template('index.html', flashcards=flashcards)
+
+@app.route('/add', methods=['POST'])
+def add_card():
+    front = request.form.get('front')
+    back = request.form.get('back')
+    if front and back:
+        flashcards.append({"front": front, "back": back})
+    return redirect(url_for('index'))
+
+@app.route('/delete/<int:index>')
+def delete_card(index):
+    if 0 <= index < len(flashcards):
+        flashcards.pop(index)
+    return redirect(url_for('index'))
+```
+
+### 🌐 Frontend – HTML, CSS & JavaScript
+
+Das Frontend rendert die Karten als Carousel. Das zentrale Element ist klickbar (flip), daneben werden je eine Karte als Vorschau (Sneak Peek) angezeigt.
+
+Wichtige Funktionen im JavaScript:
+
+- `renderCards()` – rendert das Carousel mit drei Karten (prev, current, next)
+- `flipCard()` – dreht die zentrale Karte um (Vorder- <-> Rückseite)
+- `prevCard()` / `nextCard()` – Navigation durch das Karussell
+
+![gui.png](images/gui.png)
+---
+
+## Deployment
+Die App ist unter dem URL https://flashcards-singhsuk.azurewebsites.net deployed
+![deployment_cli.png](images/deployment_cli.png)
+
+
+## 📦 Dependency Management
+
+### requirements.in
+
 ```text
 flask
+```
+
+### requirements.txt (generiert mit `pip-compile`)
+
+```text
+click==8.1.3
+Flask==2.2.5
+itsdangerous==2.1.2
+Jinja2==3.1.2
+MarkupSafe==2.1.3
+```
+
+---
+
+## 🚀 Projekt starten (lokal)
+
+```bash
+# Virtuelle Umgebung aktivieren (sofern vorhanden)
+source .venv/bin/activate
+
+# App starten
+export FLASK_APP=app.py
+flask run
+```
+
+Die Applikation ist dann unter `http://127.0.0.1:5000/` erreichbar.
+
+---
+
+## 🗂️ Projektstruktur
+
+```
+mdm_lernjournal_1_python/
+├── .venv/                 # Virtuelle Umgebung (ausgeschlossen in .gitignore)
+├── static/
+│   └── js/
+│       └── main.js        # JS-Logik für das Flashcard-Carousel
+├── templates/
+│   └── index.html         # HTML-Template für Flask
+├── app.py                 # Flask-App
+├── .gitignore             # Ignorierte Dateien
+├── requirements.in        # Minimale Abhängigkeiten
+├── requirements.txt       # Generierte Abhängigkeiten
+└── README.md              # Projektdokumentation
+```
+
+---
